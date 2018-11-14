@@ -29,6 +29,6 @@ public class Project3_PlugIn implements PlugInFilter {
     public void run(ImageProcessor ip) {
         int M = ip.getWidth();
         int N = ip.getHeight();
-        //TODO do project
+        //TO DO do project
     }
 }
