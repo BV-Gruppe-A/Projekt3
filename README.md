@@ -1,38 +1,38 @@
-# Bildverarbeitung Projekt 2: Kontrastanpassung
+# Bildverarbeitung Projekt 3: Histogramm, Grauwertwandlung, Momente
 
 Verantwortlich: [Torsten Rauch](https://github.com/ToRauch), [Julian Knaup](https://github.com/julianknaup), [Alissa Müller](https://github.com/chaosbambi) & [Jan-Philipp Töberg](https://github.com/Janfiderheld)
 
 Projektbetreuer: Dipl.-Inform. Jan Leif Hoffmann & Prof. Dr.-Ing. Volker Lohweg 
 
 
-Startdatum: 31.10.2018
+Startdatum: 14.11.2018
 
-Enddatum & Vorstellung: 14.11.2018
+Enddatum & Vorstellung: 28.11.2018
 
 ## Aufgabenbeschreibung:
 
-### Programmierung
+### Teil A) Histogramm
 
-- Erstellen Sie ein Java-Plugin für ImageJ, das über einen Nutzerdialog beliebige minimale und maximale 8-Bit-Referenzgrauwerte einliest und ein Ausgangsbild auf diese Werte linear skaliert 
-- Verwenden Sie als Testeingabe die gegebenen Bilder und u.a. die Werte 0/255 (min/max).
-- Welche Erkenntnisse können Sie durch geeignete Kontrastanpassungen gewinnen bzgl.
-  - enhance-me.gif,
-  - dem gruppenspezifischen Bild und
-  - pluto.png?
-- Implementieren Sie eine Automatik, die die Skalierung so auswählt, dass mindestens 1 % (x %) der Pixel schwarz (0) bzw. weiß (255) wird
+- Erstellen Sie ein Java-Plugin für ImageJ
+- Erstellen Sie eine eigene Methode, die für ein Grauwertbild das zugehörige Histogramm ermittelt
 
-### Ausarbeitung & Präsentation
+### Teil B) Grauwertwandlung
 
-- Präsentieren Sie (d.h. als Gruppe) Ihr Ergebnis, insbesondere unter erläuternder Darstellung der notwendigen Gleichungen und der Verwendung geeigneter Grafiken (8 min)
-- Fertigen Sie individuell (d.h. pro Person) eine zwei Seiten umfassende wissenschaftliche Ausarbeitung unter Nutzung der LaTeX-Vorlage an
+- Wandeln Sie mindestens das gruppenspezifische Farbbild in ein Grauwertbild, zum Einen als Intensitätsbild, zum anderen auf übliche Art und Weise
+- Lassen sich die unterschiedlichen Weisen zur Grauwertwandlung im Histogramm wiederfinden? Diskutieren Sie das Ergebnis!
 
-### Anmerkungen
+### Teil C) Momente
 
-- Hinweis: Parameter und Rückgabewert – siehe Dokumentation
-- IJ.getNumber() öffnet ein Dialogfenster zum Einlesen nutzerspezifizierter Werte 
-- Textausgabe
-  - IJ.log() ermöglicht eine Log-Ausgabe in einem Textfenster
-  - Allgemeinere Alternative: Klasse ij.text.TextWindow
-  - Popup-Dialog (sog. Alert): IJ. showMessage()
+- Berechnen Sie die statistischen Momente 1 bis 4 sowie die Entropie der Bilder anhand des Histogramms. Welche Aussagen lassen sich treffen? Begründen Sie!
+- Wie verhalten sich Momente und Entropie, wenn Sie
+  - additives Gauß-Rauschen (mittelwertfrei, σ = 10) auf die Texturen geben?
+  - Salz-und-Pfeffer-Rauschen auf die Texturen geben?
+  
+### Teil D) Präsentation
 
-# Projekt3_GruppeA_BV
+- Präsentieren Sie Ihr Ergebnis (12 min)
+- Denken Sie daran, Gleichungen und Visualisierungen geeignet einzusetzen
+
+### Hinweis
+
+Verwenden Sie die Java-Methode double Random.nextGaussian(), die Gauß-verteilte Zufallswerte mit μ = 0 und σ = 1 erzeugt, und skalieren Sie diese auf die gewünschten Pixelwerte.
