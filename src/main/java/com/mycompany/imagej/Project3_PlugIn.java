@@ -73,6 +73,7 @@ public class Project3_PlugIn implements PlugInFilter {
 		for(int i=0; i < nHist.length; i++) {
     		entropy+=nHist[i]*Math.log10(nHist[i]);
     	}
+		entropy = -1 * entropy;
 		return entropy;
 	}
 
