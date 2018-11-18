@@ -13,6 +13,9 @@ public class Project3_PlugIn implements PlugInFilter {
     
 	final int BLACK = 0;
 	final int WHITE = 255;
+	 
+	// maximal vector length in the RGB color space if red = green = blue = 255
+	final int MAX_VECTOR_LENGTH = 442;
 	
 	// masks to get the 8-Bit color value from the whole 32-Bit int
 	final int RED_MASK = 0x00FF0000;
@@ -92,13 +95,14 @@ public class Project3_PlugIn implements PlugInFilter {
     }
     
     // calculates the grey value as the length of the vector in the RGB color space
-    // TODO value needs to be scaled
     int calculateIntensity(int[] rgbValues) {
     	int redSquared = (int) Math.pow(rgbValues[0], 2);
     	int greenSquared = (int) Math.pow(rgbValues[1], 2);
     	int blueSquared = (int) Math.pow(rgbValues[2], 2);
     	
-    	int grey = (int) Math.round(Math.sqrt(redSquared + greenSquared + blueSquared));
+    	int intensity = (int) Math.round(Math.sqrt(redSquared + greenSquared + blueSquared));
+    	int grey = (int) Math.round((intensity * WHITE) / MAX_VECTOR_LENGTH);
+    	
     	return ((grey & 0xff) << 16) | ((grey & 0xff) << 8) | grey & 0xff;
     }
     
@@ -154,6 +158,7 @@ public class Project3_PlugIn implements PlugInFilter {
 		return entropy;
 	}
 	
+	
 	void addGaussianNoise (FloatProcessor I) 
 		 Random rnd = new Random();
 		 for (int v = 0; v < N; v++) {
@@ -164,5 +169,4 @@ public class Project3_PlugIn implements PlugInFilter {
 			}
 		 }
 	}
-
 }
