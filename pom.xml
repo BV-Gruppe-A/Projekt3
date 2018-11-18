@@ -13,7 +13,7 @@
 	</parent>
 
 	<groupId>com.GruppeA</groupId>
-	<artifactId>Kontrastanpassung_PlugIn</artifactId>
+	<artifactId>Project3_PlugIn</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 
 	<name>Process Pixels</name>
