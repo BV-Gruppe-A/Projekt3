@@ -5,6 +5,8 @@ import ij.ImagePlus;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 import java.util.Random;
+
+
 public class Project3_PlugIn implements PlugInFilter {
     
 	final int BLACK = 0;
@@ -77,12 +79,12 @@ public class Project3_PlugIn implements PlugInFilter {
 		return entropy;
 	}
 	
-	void addGaussianNoise (FloatProcessor I, double s) {
+	void addGaussianNoise (FloatProcessor I) 
 		 Random rnd = new Random();
 		 for (int v = 0; v < N; v++) {
 			for (int u = 0; u < M; u++) {
 				float val = I.getf(u, v);
-				float noise = (float) (rnd.nextGaussian() * s);
+				float noise = (float) (rnd.nextGaussian() * 10);
 				I.setf(u, v, val + noise);
 			}
 		 }
