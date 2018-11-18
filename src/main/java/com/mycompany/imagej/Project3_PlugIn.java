@@ -159,7 +159,7 @@ public class Project3_PlugIn implements PlugInFilter {
 	}
 	
 	
-	void addGaussianNoise (FloatProcessor I) 
+	void addGaussianNoise (FloatProcessor I) { 
 		 Random rnd = new Random();
 		 for (int v = 0; v < N; v++) {
 			for (int u = 0; u < M; u++) {
@@ -168,5 +168,17 @@ public class Project3_PlugIn implements PlugInFilter {
 				I.setf(u, v, val + noise);
 			}
 		 }
+	}
+	int[] calculateHistogram() {
+		//calculate the histogram of a 8 bit gray value image
+		//compare page 49
+		int[] histogram = new int[255];
+		for (int v = 0; v < N; v++) {
+			for (int u = 0; u < M; u++) {
+				int i = ip.getPixel(u,v);
+				histogram[i]++;
+			}
+		 }
+		return histogram;
 	}
 }
