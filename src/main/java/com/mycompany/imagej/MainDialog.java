@@ -1,5 +1,6 @@
 package com.mycompany.imagej;
 
+import ij.ImagePlus;
 import ij.gui.GenericDialog;
 import ij.plugin.filter.SaltAndPepper;
 import ij.process.FloatProcessor;
@@ -7,6 +8,7 @@ import ij.process.ImageProcessor;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,11 +18,12 @@ public class MainDialog {
 
 	GenericDialog gd;
 	
-	public MainDialog(ImageProcessor ip) {		
+	public MainDialog(ImagePlus image) {	
+		ImageProcessor ip = image.getProcessor();
 		Histogram hist = new Histogram(ip);
 		
 		gd = new GenericDialog("Histogram");
-		
+		gd.setLayout(new GridLayout(1,2));
 		FlowLayout flLayout = new FlowLayout();
 		JPanel jp1 = new JPanel(flLayout);
 		JPanel jp2 = new JPanel(flLayout);
@@ -32,7 +35,8 @@ public class MainDialog {
 		//rauschen1.addActionListener((e)->{hist.addGaussianNoise(new FloatProcessor(), ip.getWidth(), ip.getHeight());});
 		rauschen2.addActionListener((e)->{
 			SaltAndPepper sp = new SaltAndPepper();
-			sp.add(ip,1);});
+			sp.add(ip,1);
+			gd.repaint();});
 		jp1.add(rauschen1);
 		jp1.add(rauschen2);
 		
@@ -54,9 +58,11 @@ public class MainDialog {
 		outer.add(jp1, BorderLayout.NORTH);
 		outer.add(jp2, BorderLayout.CENTER);
 		
+		gd.addImage(image);
 		gd.add(outer);
 		
 		gd.showDialog();
+	
 	}
 	
 }

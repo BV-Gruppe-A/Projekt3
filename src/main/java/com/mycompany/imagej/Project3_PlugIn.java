@@ -37,16 +37,16 @@ public class Project3_PlugIn implements PlugInFilter {
     public void run(ImageProcessor ip) {
         int M = ip.getWidth();
         int N = ip.getHeight();
-        
+        ImagePlus greyPicture;
+        ByteProcessor bp;
         int whichMethod = (int)IJ.getNumber("Which of the three Methods should be used? (Input: 1-3)", 1);
         
         switch(whichMethod) {
         case 1:
         	// Possiblity 1: Converts the image to a byteProcessor (= no colors)
             // seen on pages 318 & 325 in the book 
-            ByteProcessor bp = ip.convertToByteProcessor();
-            ImagePlus greyPicture = new ImagePlus("Grey Image", bp);
-            greyPicture.show();
+            bp = ip.convertToByteProcessor();
+            
             
             break;
         case 2:
@@ -57,8 +57,11 @@ public class Project3_PlugIn implements PlugInFilter {
                 	int color = ip.getPixel(u, v);            	
                 	int new_p = calculateGreyscale(getRGBValues(color));            	
             		ip.putPixel(u, v, new_p);
-            	}
-            }            
+            		
+                }
+            }  
+            bp = ip.convertToByteProcessor(false);
+            
             break;
             
         case 3:
@@ -69,16 +72,20 @@ public class Project3_PlugIn implements PlugInFilter {
                 	int color = ip.getPixel(u, v);            	
                 	int new_p = calculateIntensity(getRGBValues(color));            	
             		ip.putPixel(u, v, new_p);
-            	}
-            }            
+            	
+                }
+            }   
+            bp = ip.convertToByteProcessor(false);
             break;
             
         default:
-        	IJ.showMessage("Error", "Wrong Input!\nPlease try again.");            	
+        	IJ.showMessage("Error", "Wrong Input!\nPlease try again."); 
+        	bp = ip.convertToByteProcessor();
         }
+        greyPicture = new ImagePlus("Grey Image", bp);
+        greyPicture.show();
         
-        
-        MainDialog main = new MainDialog(ip);
+        MainDialog main = new MainDialog(greyPicture);
     }
 
     // splits the color-value into the 3 resulting colors (RGB)
