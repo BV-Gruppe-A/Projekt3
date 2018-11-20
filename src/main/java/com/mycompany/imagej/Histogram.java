@@ -121,7 +121,7 @@ public class Histogram {
     private double kurtosis(double[] nHist, double mean, double var) {
     	double kur = 0;
     	for(int i=0; i < nHist.length; i++) {
-    		mean+=Math.pow(i-mean, 4)*nHist[i];
+    		kur+=Math.pow(i-mean, 4)*nHist[i];
     	}
     	kur = -3 + Math.pow(var, 2) * kur;
     	return kur;

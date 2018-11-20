@@ -39,13 +39,21 @@ public class Project3_PlugIn implements PlugInFilter {
         int N = ip.getHeight();
         ImagePlus greyPicture;
         ByteProcessor bp;
-        int whichMethod = (int)IJ.getNumber("Which of the three Methods should be used? (Input: 1-3)", 1);
+        int whichMethod = (int)IJ.getNumber("Which of the two Methods should be used? (Input: 1-2)", 1);
         
         switch(whichMethod) {
         case 1:
-        	// Possiblity 1: Converts the image to a byteProcessor (= no colors)
-            // seen on pages 318 & 325 in the book 
-            bp = ip.convertToByteProcessor();
+            // Possiblity 1: Calculating the resulting grey value for every pixel
+            // based on the formula from the Übung (14.11.18)
+            for (int u = 0; u < M; u++) {
+                for (int v = 0; v < N; v++) {
+                	int color = ip.getPixel(u, v);            	
+                	int new_p = calculateIntensity(getRGBValues(color));    
+                	
+            		ip.putPixel(u, v, new_p);            	
+                }
+            }   
+            bp = ip.convertToByteProcessor(false);
             
             
             break;
@@ -56,30 +64,17 @@ public class Project3_PlugIn implements PlugInFilter {
                 for (int v = 0; v < N; v++) {
                 	int color = ip.getPixel(u, v);            	
                 	int new_p = calculateGreyscale(getRGBValues(color));            	
-            		ip.putPixel(u, v, new_p);
-            		
+            		ip.putPixel(u, v, new_p);            		
                 }
             }  
             bp = ip.convertToByteProcessor(false);
             
             break;
             
-        case 3:
-            // Possiblity 3: Calculating the resulting grey value for every pixel
-            // based on the formula from the Übung (14.11.18)
-            for (int u = 0; u < M; u++) {
-                for (int v = 0; v < N; v++) {
-                	int color = ip.getPixel(u, v);            	
-                	int new_p = calculateIntensity(getRGBValues(color));            	
-            		ip.putPixel(u, v, new_p);
-            	
-                }
-            }   
-            bp = ip.convertToByteProcessor(false);
-            break;
-            
         default:
         	IJ.showMessage("Error", "Wrong Input!\nPlease try again."); 
+        	// Possiblity 3: Converts the image to a byteProcessor (= no colors)
+            // seen on pages 318 & 325 in the book 
         	bp = ip.convertToByteProcessor();
         }
         greyPicture = new ImagePlus("Grey Image", bp);

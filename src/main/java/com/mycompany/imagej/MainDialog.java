@@ -2,6 +2,7 @@ package com.mycompany.imagej;
 
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
+import ij.measure.ResultsTable;
 import ij.plugin.filter.SaltAndPepper;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
@@ -15,14 +16,16 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class MainDialog {
-
+	ResultsTable rs;
 	GenericDialog gd;
+	int rowNumber = 0;
 	
 	public MainDialog(ImagePlus image) {	
 		ImageProcessor ip = image.getProcessor();
 		Histogram hist = new Histogram(ip);
 		
 		gd = new GenericDialog("Histogram");
+		gd.setModal(false);
 		gd.setLayout(new GridLayout(1,2));
 		FlowLayout flLayout = new FlowLayout();
 		JPanel jp1 = new JPanel(flLayout);
@@ -32,37 +35,54 @@ public class MainDialog {
 		JButton rauschen1 = new JButton("Gauß Rauschen");
 		JButton rauschen2 = new JButton("Salt and Pepper Rauschen");
 		
-		//rauschen1.addActionListener((e)->{hist.addGaussianNoise(new FloatProcessor(), ip.getWidth(), ip.getHeight());});
+		rauschen1.addActionListener((e)->{
+			hist.addGaussianNoise(ip.convertToFloatProcessor(), ip.getWidth(), ip.getHeight());
+			gd.repaint();
+			hist.update();
+			updateResultTable(hist);});
 		rauschen2.addActionListener((e)->{
 			SaltAndPepper sp = new SaltAndPepper();
 			sp.add(ip,1);
-			gd.repaint();});
+			gd.repaint();
+			hist.update();
+			updateResultTable(hist);});
 		jp1.add(rauschen1);
 		jp1.add(rauschen2);
 		
-		String [] spaltenNamen = {"Mittelwert","Minimum","Maximum","Varianz","Schiefe","Wölbung","Entropie"};
+		/*String [] spaltenNamen = {"Mittelwert","Minimum","Maximum","Varianz","Schiefe","Wölbung","Entropie"};
 		DefaultTableModel tableModel = new DefaultTableModel(1, spaltenNamen.length);
-		tableModel.setColumnIdentifiers(spaltenNamen);
-		tableModel.setValueAt(hist.getMean(), 0, 0);
-		tableModel.setValueAt(hist.getMin(), 0, 1);
-		tableModel.setValueAt(hist.getMax(), 0, 2);
-		tableModel.setValueAt(hist.getVar(), 0, 3);
-		tableModel.setValueAt(hist.getSkewness(), 0, 4);
-		tableModel.setValueAt(hist.getKurtosis(), 0, 5);
-		tableModel.setValueAt(hist.getEntropy(), 0, 6);
+		
 		
 		JTable table = new JTable(tableModel);
 		
 		jp2.add(new JScrollPane(table));
-		
+		*/
 		outer.add(jp1, BorderLayout.NORTH);
 		outer.add(jp2, BorderLayout.CENTER);
 		
 		gd.addImage(image);
 		gd.add(outer);
 		
+		rs = new ResultsTable();
+		updateResultTable(hist);
+		
 		gd.showDialog();
 	
+		
+		
+	}
+	
+	void updateResultTable(Histogram hist) {
+		
+		rs.setValue("Mean",rowNumber,hist.getMean());
+		rs.setValue("Min",rowNumber,hist.getMin());
+		rs.setValue("Max",rowNumber,hist.getMax());
+		rs.setValue("Var",rowNumber,hist.getVar());
+		rs.setValue("Skewness",rowNumber,hist.getSkewness());
+		rs.setValue("Kurtosis",rowNumber,hist.getKurtosis());
+		rs.setValue("Entropy",rowNumber++,hist.getEntropy());
+		
+		rs.show("Results");
 	}
 	
 }
