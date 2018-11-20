@@ -42,21 +42,14 @@ public class MainDialog {
 			updateResultTable(hist);});
 		rauschen2.addActionListener((e)->{
 			SaltAndPepper sp = new SaltAndPepper();
-			sp.add(ip,1);
+			sp.run(ip);
 			gd.repaint();
 			hist.update();
 			updateResultTable(hist);});
 		jp1.add(rauschen1);
 		jp1.add(rauschen2);
 		
-		/*String [] spaltenNamen = {"Mittelwert","Minimum","Maximum","Varianz","Schiefe","Wölbung","Entropie"};
-		DefaultTableModel tableModel = new DefaultTableModel(1, spaltenNamen.length);
 		
-		
-		JTable table = new JTable(tableModel);
-		
-		jp2.add(new JScrollPane(table));
-		*/
 		outer.add(jp1, BorderLayout.NORTH);
 		outer.add(jp2, BorderLayout.CENTER);
 		
