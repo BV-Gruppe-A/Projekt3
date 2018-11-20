@@ -129,12 +129,14 @@ public class Histogram {
 
 
 	private double entropy(double[] nHist) {
-		double entropy = 0;
+		double ent = 0;
 		for(int i=0; i < nHist.length; i++) {
-    		entropy+=nHist[i]*Math.log10(nHist[i])/Math.log10(2);
-    	}
-		entropy = -entropy;
-		return entropy;
+			if(nHist[i] != 0) {
+				ent+=nHist[i]*Math.log10(nHist[i])/Math.log10(2);
+			}
+		}
+		ent = -ent;
+		return ent;
 	}
 	
 	

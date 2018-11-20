@@ -30,7 +30,9 @@ public class MainDialog {
 		JButton rauschen2 = new JButton("Salt and Pepper Rauschen");
 		
 		//rauschen1.addActionListener((e)->{hist.addGaussianNoise(new FloatProcessor(), ip.getWidth(), ip.getHeight());});
-		rauschen2.addActionListener((e)->{new SaltAndPepper().add(ip,1);});
+		rauschen2.addActionListener((e)->{
+			SaltAndPepper sp = new SaltAndPepper();
+			sp.add(ip,1);});
 		jp1.add(rauschen1);
 		jp1.add(rauschen2);
 		
