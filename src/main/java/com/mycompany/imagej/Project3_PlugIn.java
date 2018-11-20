@@ -37,7 +37,7 @@ public class Project3_PlugIn implements PlugInFilter {
     public void run(ImageProcessor ip) {
         int M = ip.getWidth();
         int N = ip.getHeight();
-
+        
         int whichMethod = (int)IJ.getNumber("Which of the three Methods should be used? (Input: 1-3)", 1);
         
         switch(whichMethod) {
@@ -76,6 +76,9 @@ public class Project3_PlugIn implements PlugInFilter {
         default:
         	IJ.showMessage("Error", "Wrong Input!\nPlease try again.");            	
         }
+        
+        
+        MainDialog main = new MainDialog(ip);
     }
 
     // splits the color-value into the 3 resulting colors (RGB)
@@ -91,7 +94,7 @@ public class Project3_PlugIn implements PlugInFilter {
     // calculates the grey value as a weighted sum of the rgb Values
     int calculateGreyscale(int[] rgbValues) {
      int grey =  (int)(WEIGHT_RED * rgbValues[0] + WEIGHT_GREEN * rgbValues[1] + WEIGHT_BLUE * rgbValues[2]); 
-     return ((grey & 0xff) << 16) | ((grey & 0xff) << 8) | grey & 0xff;
+     return makeGreyToRGBValue(grey);
     }
     
     // calculates the grey value as the length of the vector in the RGB color space
@@ -103,82 +106,11 @@ public class Project3_PlugIn implements PlugInFilter {
     	int intensity = (int) Math.round(Math.sqrt(redSquared + greenSquared + blueSquared));
     	int grey = (int) Math.round((intensity * WHITE) / MAX_VECTOR_LENGTH);
     	
+    	return makeGreyToRGBValue(grey);
+    }
+    
+    int makeGreyToRGBValue(int grey) {
     	return ((grey & 0xff) << 16) | ((grey & 0xff) << 8) | grey & 0xff;
     }
     
-    double[] normHistogram(int[] histogram, int M, int N) {
-    	double [] normedHist = new double[histogram.length];
-    	for(int i=0;i<histogram.length;i++) {
-    		normedHist[i] = histogram[i]/(double)(N*M);
-    	}
-    	return normedHist;
-    }
-    
-    double mean(double[] nHist) {
-    	double mean = 0;
-    	for(int i=0; i < nHist.length; i++) {
-    		mean+=i*nHist[i];
-    	}
-    	return mean;
-    }
-
-    double variance(double[] nHist, double mean) {
-    	double var = 0;
-    	for(int i=0; i < nHist.length; i++) {
-    		var+=Math.pow(i-mean, 2)*nHist[i];
-    	}
-    	return var;
-    }
-  
-    double skewness(double[] nHist, double mean, double var) {
-    	double skew = 0;
-    	for(int i=0; i < nHist.length; i++) {
-    		skew+=Math.pow(i-mean,3)*nHist[i];
-    	}
-    	skew=Math.pow(Math.sqrt(var),3)*skew;
-    	return skew;
-    }
-    
-    double kurtosis(double[] nHist, double mean, double var) {
-    	double kur = 0;
-    	for(int i=0; i < nHist.length; i++) {
-    		mean+=Math.pow(i-mean, 4)*nHist[i];
-    	}
-    	kur = -3 + Math.pow(var, 2) * kur;
-    	return kur;
-    }
-
-
-	double entropy(double[] nHist) {
-		double entropy = 0;
-		for(int i=0; i < nHist.length; i++) {
-    		entropy+=nHist[i]*Math.log10(nHist[i]);
-    	}
-		entropy = -1 * entropy;
-		return entropy;
-	}
-	
-	
-	void addGaussianNoise (FloatProcessor I, int N, int M) { 
-		 Random rnd = new Random();
-		 for (int v = 0; v < N; v++) {
-			for (int u = 0; u < M; u++) {
-				float val = I.getf(u, v);
-				float noise = (float) (rnd.nextGaussian() * 10);
-				I.setf(u, v, val + noise);
-			}
-		 }
-	}
-	int[] calculateHistogram(ImageProcessor ip, int N, int M) {
-		//calculate the histogram of a 8 bit gray value image
-		//compare page 49
-		int[] histogram = new int[255];
-		for (int v = 0; v < N; v++) {
-			for (int u = 0; u < M; u++) {
-				int i = ip.getPixel(u,v);
-				histogram[i]++;
-			}
-		 }
-		return histogram;
-	}
 }
