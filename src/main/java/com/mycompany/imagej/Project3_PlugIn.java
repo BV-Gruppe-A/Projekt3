@@ -159,7 +159,7 @@ public class Project3_PlugIn implements PlugInFilter {
 	}
 	
 	
-	void addGaussianNoise (FloatProcessor I) { 
+	void addGaussianNoise (FloatProcessor I, int N, int M) { 
 		 Random rnd = new Random();
 		 for (int v = 0; v < N; v++) {
 			for (int u = 0; u < M; u++) {
@@ -169,7 +169,7 @@ public class Project3_PlugIn implements PlugInFilter {
 			}
 		 }
 	}
-	int[] calculateHistogram() {
+	int[] calculateHistogram(ImageProcessor ip, int N, int M) {
 		//calculate the histogram of a 8 bit gray value image
 		//compare page 49
 		int[] histogram = new int[255];
