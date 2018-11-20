@@ -140,7 +140,7 @@ public class Histogram {
 	}
 	
 	
-	public void addGaussianNoise (FloatProcessor I, int N, int M) { 
+	public void addGaussianNoise (ImageProcessor I, int N, int M) { 
 		 Random rnd = new Random();
 		 for (int v = 0; v < N; v++) {
 			for (int u = 0; u < M; u++) {

@@ -36,7 +36,7 @@ public class MainDialog {
 		JButton rauschen2 = new JButton("Salt and Pepper Rauschen");
 		
 		rauschen1.addActionListener((e)->{
-			hist.addGaussianNoise(ip.convertToFloatProcessor(), ip.getWidth(), ip.getHeight());
+			hist.addGaussianNoise(ip, ip.getWidth(), ip.getHeight());
 			gd.repaint();
 			hist.update();
 			updateResultTable(hist);});
