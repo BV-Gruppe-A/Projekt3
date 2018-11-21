@@ -4,10 +4,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ByteProcessor;
-import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
-import java.util.Random;
-
 
 public class Project3_PlugIn implements PlugInFilter {
     
@@ -37,8 +34,10 @@ public class Project3_PlugIn implements PlugInFilter {
     public void run(ImageProcessor ip) {
         int M = ip.getWidth();
         int N = ip.getHeight();
+        
         ImagePlus greyPicture;
         ByteProcessor bp;
+        
         int whichMethod = (int)IJ.getNumber("Which of the two Methods should be used? (Input: 1-2)", 1);
         
         switch(whichMethod) {
@@ -72,11 +71,12 @@ public class Project3_PlugIn implements PlugInFilter {
             break;
             
         default:
-        	IJ.showMessage("Error", "Wrong Input!\nPlease try again."); 
+        	IJ.showMessage("Error", "Wrong Input!\nIamgeJ will convert the picture for you."); 
         	// Possiblity 3: Converts the image to a byteProcessor (= no colors)
             // seen on pages 318 & 325 in the book 
-        	bp = ip.convertToByteProcessor();
+        	bp = ip.convertToByteProcessor(true);
         }
+        
         greyPicture = new ImagePlus("Grey Image", bp);
         greyPicture.show();
         
@@ -111,6 +111,7 @@ public class Project3_PlugIn implements PlugInFilter {
     	return makeGreyToRGBValue(grey);
     }
     
+    // saves the grey value as a valid rgb value by setting r = g = b = grey
     int makeGreyToRGBValue(int grey) {
     	return ((grey & 0xff) << 16) | ((grey & 0xff) << 8) | grey & 0xff;
     }
