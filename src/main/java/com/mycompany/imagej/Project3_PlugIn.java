@@ -12,7 +12,7 @@ public class Project3_PlugIn implements PlugInFilter {
 	final int WHITE = 255;
 	 
 	// maximal vector length in the RGB color space if red = green = blue = 255
-	final int MAX_VECTOR_LENGTH = 442;
+	final double MAX_VECTOR_LENGTH = Math.sqrt(3 * Math.pow(WHITE, 2));
 	
 	// masks to get the 8-Bit color value from the whole 32-Bit int
 	final int RED_MASK = 0x00FF0000;
@@ -47,8 +47,7 @@ public class Project3_PlugIn implements PlugInFilter {
             for (int u = 0; u < M; u++) {
                 for (int v = 0; v < N; v++) {
                 	int color = ip.getPixel(u, v);            	
-                	int new_p = calculateIntensity(getRGBValues(color));    
-                	
+                	int new_p = calculateIntensity(getRGBValues(color));               	
             		ip.putPixel(u, v, new_p);            	
                 }
             }   
@@ -71,20 +70,21 @@ public class Project3_PlugIn implements PlugInFilter {
             break;
             
         default:
-        	IJ.showMessage("Error", "Wrong Input!\nIamgeJ will convert the picture for you."); 
+        	IJ.showMessage("Error", "Wrong Input!\nImageJ will convert the picture for you :)"); 
+			
         	// Possiblity 3: Converts the image to a byteProcessor (= no colors)
             // seen on pages 318 & 325 in the book 
         	bp = ip.convertToByteProcessor(true);
         }
         
         greyPicture = new ImagePlus("Grey Image", bp);
-        greyPicture.show();
+        // greyPicture.show();
         
         MainDialog main = new MainDialog(greyPicture);
     }
 
     // splits the color-value into the 3 resulting colors (RGB)
-    int[] getRGBValues(int color) {
+    private int[] getRGBValues(int color) {
     	int red = (color & RED_MASK) >> 16;
     	int green = (color & GREEN_MASK) >> 8;
     	int blue = color & BLUE_MASK;
@@ -94,25 +94,26 @@ public class Project3_PlugIn implements PlugInFilter {
     }
     
     // calculates the grey value as a weighted sum of the rgb Values
-    int calculateGreyscale(int[] rgbValues) {
-     int grey =  (int)(WEIGHT_RED * rgbValues[0] + WEIGHT_GREEN * rgbValues[1] + WEIGHT_BLUE * rgbValues[2]); 
-     return makeGreyToRGBValue(grey);
+    private int calculateGreyscale(int[] rgbValues) {
+		double sumAsDecimal = WEIGHT_RED * rgbValues[0] + WEIGHT_GREEN * rgbValues[1] + WEIGHT_BLUE * rgbValues[2];
+		int grey =  (int) Math.round(sumAsDecimal); 
+		return makeGreyToRGBValue(grey);
     }
     
     // calculates the grey value as the length of the vector in the RGB color space
-    int calculateIntensity(int[] rgbValues) {
+    private int calculateIntensity(int[] rgbValues) {
     	double redSquared =  Math.pow(rgbValues[0], 2);
     	double greenSquared =  Math.pow(rgbValues[1], 2);
     	double blueSquared =  Math.pow(rgbValues[2], 2);
     	
-    	double intensity =  (Math.sqrt(redSquared + greenSquared + blueSquared));
-    	int grey = (int) Math.round((intensity * (double) WHITE) / (double)MAX_VECTOR_LENGTH);
+    	double intensity =  Math.sqrt(redSquared + greenSquared + blueSquared);
+    	int grey = (int) Math.round((intensity * (double) WHITE) / MAX_VECTOR_LENGTH);
     	
     	return makeGreyToRGBValue(grey);
     }
     
     // saves the grey value as a valid rgb value by setting r = g = b = grey
-    int makeGreyToRGBValue(int grey) {
+    private int makeGreyToRGBValue(int grey) {
     	return ((grey & 0xff) << 16) | ((grey & 0xff) << 8) | grey & 0xff;
     }
     
