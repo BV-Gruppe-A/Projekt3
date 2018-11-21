@@ -105,8 +105,8 @@ public class Project3_PlugIn implements PlugInFilter {
     	double greenSquared =  Math.pow(rgbValues[1], 2);
     	double blueSquared =  Math.pow(rgbValues[2], 2);
     	
-    	double intensity =  (Math.sqrt(redSquared + greenSquared + blueSquared));
-    	int grey = (int) Math.round((intensity * (double) WHITE) / (double)MAX_VECTOR_LENGTH);
+    	double intensity =  Math.round(Math.sqrt(redSquared + greenSquared + blueSquared));
+    	int grey = (int) Math.round((intensity * WHITE) / MAX_VECTOR_LENGTH);
     	
     	return makeGreyToRGBValue(grey);
     }
