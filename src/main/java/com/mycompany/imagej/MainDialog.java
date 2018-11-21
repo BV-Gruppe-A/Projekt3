@@ -14,66 +14,61 @@ import java.awt.GridLayout;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-
 public class MainDialog {
 	ResultsTable rs;
 	GenericDialog gd;
 	int rowNumber = 0;
 	
+	// Constructor, which fills the dialog with elements
 	public MainDialog(ImagePlus image) {	
 		ImageProcessor ip = image.getProcessor();
 		Histogram hist = new Histogram(ip);
 		
 		gd = new GenericDialog("Histogram");
 		gd.setModal(false);
-		gd.setLayout(new GridLayout(1,2));
-		FlowLayout flLayout = new FlowLayout();
-		JPanel jp1 = new JPanel(flLayout);
-		JPanel jp2 = new JPanel(flLayout);
-		JPanel outer = new JPanel(new BorderLayout());
+		gd.setLayout(new BorderLayout());
 		
-		JButton rauschen1 = new JButton("Gauß Rauschen");
-		JButton rauschen2 = new JButton("Salt and Pepper Rauschen");
+		ButtonGroup bgRauschButtons = new ButtonGroup();
 		
-		rauschen1.addActionListener((e)->{
+		JButton btnGaussRausch = new JButton("Gauß Rauschen");
+		JButton btnSaltPeppRausch = new JButton("Salt and Pepper Rauschen");
+		
+		btnGaussRausch.addActionListener((e)->{
 			hist.addGaussianNoise(ip, ip.getWidth(), ip.getHeight());
 			gd.repaint();
 			hist.update();
-			updateResultTable(hist);});
-		rauschen2.addActionListener((e)->{
+			updateResultTable(hist);
+		});
+			
+		btnSaltPeppRausch.addActionListener((e)->{
 			SaltAndPepper sp = new SaltAndPepper();
 			sp.run(ip);
 			gd.repaint();
 			hist.update();
-			updateResultTable(hist);});
-		jp1.add(rauschen1);
-		jp1.add(rauschen2);
+			updateResultTable(hist);
+		});
 		
-		
-		outer.add(jp1, BorderLayout.NORTH);
-		outer.add(jp2, BorderLayout.CENTER);
+		bgRauschButtons.add(btnGaussRausch);
+		bgRauschButtons.add(btnSaltPeppRausch);
 		
 		gd.addImage(image);
-		gd.add(outer);
+		gd.add (bgRauschButtons, BorderLayout.SOUTH);
 		
 		rs = new ResultsTable();
 		updateResultTable(hist);
 		
-		gd.showDialog();
-	
-		
-		
+		gd.showDialog();		
 	}
 	
-	void updateResultTable(Histogram hist) {
-		
-		rs.setValue("Mean",rowNumber,hist.getMean());
-		rs.setValue("Min",rowNumber,hist.getMin());
-		rs.setValue("Max",rowNumber,hist.getMax());
-		rs.setValue("Var",rowNumber,hist.getVar());
-		rs.setValue("Skewness",rowNumber,hist.getSkewness());
-		rs.setValue("Kurtosis",rowNumber,hist.getKurtosis());
-		rs.setValue("Entropy",rowNumber++,hist.getEntropy());
+	// updates the result table which shows the moments, min & max
+	private void updateResultTable(Histogram hist) {		
+		rs.setValue("Mean", rowNumber, hist.getMean());
+		rs.setValue("Min", rowNumber, hist.getMin());
+		rs.setValue("Max", rowNumber, hist.getMax());
+		rs.setValue("Var", rowNumber, hist.getVar());
+		rs.setValue("Skewness", rowNumber, hist.getSkewness());
+		rs.setValue("Kurtosis", rowNumber, hist.getKurtosis());
+		rs.setValue("Entropy", rowNumber++, hist.getEntropy());
 		
 		rs.show("Results");
 	}
