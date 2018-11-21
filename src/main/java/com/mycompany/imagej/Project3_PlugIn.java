@@ -101,11 +101,11 @@ public class Project3_PlugIn implements PlugInFilter {
     
     // calculates the grey value as the length of the vector in the RGB color space
     int calculateIntensity(int[] rgbValues) {
-    	int redSquared = (int) Math.pow(rgbValues[0], 2);
-    	int greenSquared = (int) Math.pow(rgbValues[1], 2);
-    	int blueSquared = (int) Math.pow(rgbValues[2], 2);
+    	double redSquared =  Math.pow(rgbValues[0], 2);
+    	double greenSquared =  Math.pow(rgbValues[1], 2);
+    	double blueSquared =  Math.pow(rgbValues[2], 2);
     	
-    	int intensity = (int) Math.round(Math.sqrt(redSquared + greenSquared + blueSquared));
+    	double intensity =  Math.round(Math.sqrt(redSquared + greenSquared + blueSquared));
     	int grey = (int) Math.round((intensity * WHITE) / MAX_VECTOR_LENGTH);
     	
     	return makeGreyToRGBValue(grey);
