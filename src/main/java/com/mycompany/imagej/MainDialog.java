@@ -4,15 +4,13 @@ import ij.ImagePlus;
 import ij.gui.GenericDialog;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.SaltAndPepper;
-import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-
+import java.awt.Dialog;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Panel;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 public class MainDialog {
 	ResultsTable rs;
@@ -24,23 +22,23 @@ public class MainDialog {
 		ImageProcessor ip = image.getProcessor();
 		Histogram hist = new Histogram(ip);
 		
-		gd = new GenericDialog("Histogram");
-		gd.setModal(false);
-		gd.setLayout(new BorderLayout());
+		gd = new GenericDialog("Add Noise to Grey Image");
+		gd.setModalityType(Dialog.ModalityType.MODELESS);		
+		gd.hideCancelButton();
+		gd.setOKLabel("Close");
 		
-		ButtonGroup bgRauschButtons = new ButtonGroup();
-		
-		JButton btnGaussRausch = new JButton("Gauß Rauschen");
-		JButton btnSaltPeppRausch = new JButton("Salt and Pepper Rauschen");
-		
-		btnGaussRausch.addActionListener((e)->{
+		Panel pnlRauschButtons = new Panel();		
+		JButton btnGaussNoise = new JButton("Gaussian Noise");
+		JButton btnSaltPeppNoise = new JButton("Salt and Pepper Noise");
+
+		btnGaussNoise.addActionListener((e)->{
 			hist.addGaussianNoise(ip, ip.getWidth(), ip.getHeight());
 			gd.repaint();
 			hist.update();
 			updateResultTable(hist);
 		});
 			
-		btnSaltPeppRausch.addActionListener((e)->{
+		btnSaltPeppNoise.addActionListener((e)->{
 			SaltAndPepper sp = new SaltAndPepper();
 			sp.run(ip);
 			gd.repaint();
@@ -48,16 +46,16 @@ public class MainDialog {
 			updateResultTable(hist);
 		});
 		
-		bgRauschButtons.add(btnGaussRausch);
-		bgRauschButtons.add(btnSaltPeppRausch);
-		
+		pnlRauschButtons.add(btnGaussNoise);
+		pnlRauschButtons.add(btnSaltPeppNoise);
+
 		gd.addImage(image);
-		gd.add (bgRauschButtons, BorderLayout.SOUTH);
+		gd.addPanel(pnlRauschButtons, GridBagConstraints.SOUTH, new Insets(5, 0, 0, 0));
 		
 		rs = new ResultsTable();
 		updateResultTable(hist);
 		
-		gd.showDialog();		
+		gd.showDialog();
 	}
 	
 	// updates the result table which shows the moments, min & max
@@ -71,6 +69,5 @@ public class MainDialog {
 		rs.setValue("Entropy", rowNumber++, hist.getEntropy());
 		
 		rs.show("Results");
-	}
-	
+	}	
 }
