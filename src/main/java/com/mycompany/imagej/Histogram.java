@@ -143,7 +143,7 @@ public class Histogram {
     	for(int i = 0; i < nHist.length; i++) {
     		skew += Math.pow(i - mean,3) * nHist[i];
     	}
-    	skew = Math.pow(Math.sqrt(var), 3) * skew;
+    	skew = (1 / (Math.pow(Math.sqrt(var), 3))) * skew;
     	return skew;
     }
     
@@ -153,7 +153,7 @@ public class Histogram {
     	for(int i = 0; i < nHist.length; i++) {
     		kur += Math.pow(i - mean, 4) * nHist[i];
     	}
-    	kur = -3 + Math.pow(var, 2) * kur;
+    	kur = -3 + (1/(Math.pow(var, 2))) * kur;
     	return kur;
     }
 
