@@ -30,6 +30,7 @@ public class MainDialog {
 		Panel pnlRauschButtons = new Panel();		
 		JButton btnGaussNoise = new JButton("Gaussian Noise");
 		JButton btnSaltPeppNoise = new JButton("Salt and Pepper Noise");
+		JButton btnOpenPicture = new JButton("Open Picture");
 
 		btnGaussNoise.addActionListener((e)->{
 			hist.addGaussianNoise(ip, ip.getWidth(), ip.getHeight());
@@ -46,8 +47,14 @@ public class MainDialog {
 			updateResultTable(hist);
 		});
 		
+		btnOpenPicture.addActionListener((e)->{
+			ImagePlus greyPicture = new ImagePlus("Grey Image",ip);
+			greyPicture.show();
+		});
+		
 		pnlRauschButtons.add(btnGaussNoise);
 		pnlRauschButtons.add(btnSaltPeppNoise);
+		pnlRauschButtons.add(btnOpenPicture);
 
 		gd.addImage(image);
 		gd.addPanel(pnlRauschButtons, GridBagConstraints.SOUTH, new Insets(5, 0, 0, 0));
